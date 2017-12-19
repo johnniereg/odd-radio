@@ -579,12 +579,12 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var handleSelectedStation = exports.handleSelectedStation = function handleSelectedStation(id, name, stream, type) {
+var handleSelectedStation = exports.handleSelectedStation = function handleSelectedStation(details) {
     var station = {
-        id: id,
-        name: name,
-        stream: stream,
-        type: type
+        id: details.id,
+        name: details.name,
+        stream: details.stream,
+        type: details.type
     };
     var test = { key: 'value', tester: 'test' };
     localStorage.setItem('key', JSON.stringify(station)); //sets the localStorage to the station before setting the this.State to the station
@@ -7949,6 +7949,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _ClientFunctions = __webpack_require__(7);
 
+var utils = _interopRequireWildcard(_ClientFunctions);
+
 var _AudioPlayer = __webpack_require__(29);
 
 var _AudioPlayer2 = _interopRequireDefault(_AudioPlayer);
@@ -7956,6 +7958,8 @@ var _AudioPlayer2 = _interopRequireDefault(_AudioPlayer);
 var _StationList = __webpack_require__(30);
 
 var _StationList2 = _interopRequireDefault(_StationList);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7983,15 +7987,22 @@ var App = function (_Component) {
         name: "",
         stream: "",
         type: ""
+      },
+      player: {
+        volume: 1,
+        isPlaying: false,
+        isPaused: true,
+        isLoading: false
       }
-    }, _this.handlePlayState = _ClientFunctions.handlePlayState.bind(_this);
-    _this.handleSelectedStation = _ClientFunctions.handleSelectedStation.bind(_this);
-    _this.seekStation = _ClientFunctions.seekStation.bind(_this);
-    _this.generateRandomStationId = _ClientFunctions.generateRandomStationId.bind(_this);
-    _this.loadStations = _ClientFunctions.loadStations.bind(_this);
-    _this.scrollListener = _ClientFunctions.scrollListener.bind(_this);
-    _this.findColor = _ClientFunctions.findColor.bind(_this);
-    _this.setStateSelectedStation = _ClientFunctions.setStateSelectedStation.bind(_this);
+    }, _this.handleSelectedStation = utils.handleSelectedStation.bind(_this);
+
+    _this.handlePlayState = utils.handlePlayState.bind(_this);
+    _this.seekStation = utils.seekStation.bind(_this);
+    _this.generateRandomStationId = utils.generateRandomStationId.bind(_this);
+    _this.loadStations = utils.loadStations.bind(_this);
+    _this.scrollListener = utils.scrollListener.bind(_this);
+    _this.findColor = utils.findColor.bind(_this);
+    _this.setStateSelectedStation = utils.setStateSelectedStation.bind(_this);
     return _this;
   }
 
@@ -8053,7 +8064,11 @@ var App = function (_Component) {
             )
           )
         ),
-        _react2.default.createElement(_StationList2.default, { handleSelectedStation: this.handleSelectedStation, stations: this.state.stations }),
+        _react2.default.createElement(_StationList2.default, { stations: this.state.stations,
+          handleSelectedStation: this.handleSelectedStation,
+          onStationSelect: utils.onStationSelect,
+          onInfoSelect: utils.onInfoSelect
+        }),
         _react2.default.createElement(
           'footer',
           null,
@@ -8146,7 +8161,7 @@ var AudioPlayer = function (_Component) {
               _react2.default.createElement(
                 'div',
                 { className: 'three columns' },
-                _react2.default.createElement('input', { id: 'vol-control', type: 'range', min: 0, max: 100, step: 1, onClick: this.lastClickedVolume, onInput: this.setVolume, onChange: this.setVolume })
+                _react2.default.createElement('input', { id: 'vol-control', type: 'range', min: 0, max: 100, step: 1, onInput: this.setVolume, onChange: this.setVolume })
               ),
               _react2.default.createElement(
                 'div',
@@ -8225,8 +8240,10 @@ var StationList = function (_Component) {
             type: post.stream_type,
             homePage: post.home_page,
             city: post.city,
+            stationType: 1,
             handleSelectedStation: _this2.props.handleSelectedStation,
-            stationType: 1
+            onStationSelect: _this2.props.onStationSelect,
+            onInfoSelect: _this2.props.onInfoSelect
           });
         } else {
           return _react2.default.createElement(_Station2.default, {
@@ -8238,8 +8255,10 @@ var StationList = function (_Component) {
             type: post.stream_type,
             homePage: post.home_page,
             city: post.city,
+            stationType: 2,
             handleSelectedStation: _this2.props.handleSelectedStation,
-            stationType: 2
+            onStationSelect: _this2.props.onStationSelect,
+            onInfoSelect: _this2.props.onInfoSelect
           });
         }
       });
@@ -8293,20 +8312,31 @@ var Station = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Station.__proto__ || Object.getPrototypeOf(Station)).call(this, props));
 
     _this.state = {
-      id: _this.props.id,
-      name: _this.props.name,
-      stream: _this.props.audioFeed,
-      type: _this.props.type
+      details: {
+        id: _this.props.id,
+        name: _this.props.name,
+        stream: _this.props.audioFeed,
+        type: _this.props.type
+      }
     };
+
     _this.onStationSelect = _ClientFunctions.onStationSelect.bind(_this);
-    _this.onInfoSelect = _ClientFunctions.onInfoSelect.bind(_this);
+    // this.props.onInfoSelect = this.props.onInfoSelect.bind(this);
+
     return _this;
   }
+
+  // componentDidMount() {
+  //   this.setState({
+  //     handleSelectedStation: this.props.handleSelectedStation
+  //   })
+  // }
 
   _createClass(Station, [{
     key: 'render',
     value: function render() {
-      console.log('Rendering <Station>');
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -8326,12 +8356,14 @@ var Station = function (_Component) {
             _react2.default.createElement(
               'div',
               { className: 'one-third column station-play-button center' },
-              _react2.default.createElement('i', { className: 'fa fa-play card-play-button ', 'aria-hidden': 'true', onClick: this.onStationSelect })
+              _react2.default.createElement('i', { className: 'fa fa-play card-play-button ', 'aria-hidden': 'true', onClick: function onClick(e) {
+                  return _this2.props.handleSelectedStation(_this2.state.details);
+                } })
             ),
             _react2.default.createElement(
               'div',
               { className: 'one-third column station-info-button center' },
-              _react2.default.createElement('i', { className: 'fa fa-chevron-down card-chevron', 'aria-hidden': 'true', onClick: this.onInfoSelect })
+              _react2.default.createElement('i', { className: 'fa fa-chevron-down card-chevron', 'aria-hidden': 'true', onClick: this.props.onInfoSelect })
             )
           )
         ),

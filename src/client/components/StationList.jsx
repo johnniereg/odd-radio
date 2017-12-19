@@ -14,8 +14,10 @@ class StationList extends Component {
           type={ post.stream_type }
           homePage={ post.home_page }
           city={ post.city }
-          handleSelectedStation={ this.props.handleSelectedStation }
           stationType={1}
+          handleSelectedStation={ this.props.handleSelectedStation }
+          onStationSelect={ this.props.onStationSelect }
+          onInfoSelect={ this.props.onInfoSelect }
            />
       } else {
         return <Station
@@ -27,8 +29,10 @@ class StationList extends Component {
           type={ post.stream_type }
           homePage={ post.home_page }
           city={ post.city }
-          handleSelectedStation={ this.props.handleSelectedStation }
           stationType={2}
+          handleSelectedStation={ this.props.handleSelectedStation }
+          onStationSelect={this.props.onStationSelect}
+          onInfoSelect={this.props.onInfoSelect}          
            />
       }
     });

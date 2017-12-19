@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { handleSelectedStation, handlePlayState, seekStation, generateRandomStationId, loadStations, findColor, scrollListener, setStateSelectedStation, muteAudio, lastClickedVolume } from '../util/ClientFunctions.jsx';
-
+import * as utils from '../util/ClientFunctions.jsx';
 
 import AudioPlayer from './AudioPlayer.jsx';
 import StationList from './StationList.jsx';
@@ -27,14 +26,16 @@ class App extends Component {
       }
     },
 
-    this.handlePlayState = handlePlayState.bind(this);
-    this.handleSelectedStation = handleSelectedStation.bind(this);
-    this.seekStation = seekStation.bind(this);
-    this.generateRandomStationId = generateRandomStationId.bind(this);
-    this.loadStations = loadStations.bind(this);
-    this.scrollListener = scrollListener.bind(this);
-    this.findColor = findColor.bind(this);
-    this.setStateSelectedStation = setStateSelectedStation.bind(this);
+    this.handleSelectedStation = utils.handleSelectedStation.bind(this);
+
+    
+    this.handlePlayState = utils.handlePlayState.bind(this);
+    this.seekStation = utils.seekStation.bind(this);
+    this.generateRandomStationId = utils.generateRandomStationId.bind(this);
+    this.loadStations = utils.loadStations.bind(this);
+    this.scrollListener = utils.scrollListener.bind(this);
+    this.findColor = utils.findColor.bind(this);
+    this.setStateSelectedStation = utils.setStateSelectedStation.bind(this);
   }
 
   componentDidMount() {
@@ -63,7 +64,11 @@ class App extends Component {
 
 
         </header>
-          <StationList handleSelectedStation={ this.handleSelectedStation } stations={ this.state.stations }/>
+          <StationList stations={this.state.stations} 
+            handleSelectedStation={ this.handleSelectedStation } 
+            onStationSelect={ utils.onStationSelect }
+            onInfoSelect={ utils.onInfoSelect } 
+          />
         <footer>
            <AudioPlayer stationFeed={ this.state.selectedStation } seekStation={ this.seekStation } />
         </footer>

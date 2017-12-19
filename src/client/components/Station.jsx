@@ -6,28 +6,36 @@ class Station extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.id,
-      name: this.props.name,
-      stream: this.props.audioFeed,
-      type: this.props.type
+      details: {
+        id: this.props.id,
+        name: this.props.name,
+        stream: this.props.audioFeed,
+        type: this.props.type
+      }
     }
+
     this.onStationSelect = onStationSelect.bind(this);
-    this.onInfoSelect = onInfoSelect.bind(this);
+    // this.props.onInfoSelect = this.props.onInfoSelect.bind(this);
+    
   }
 
-  render() {
-      console.log('Rendering <Station>')
-    return (
+  // componentDidMount() {
+  //   this.setState({
+  //     handleSelectedStation: this.props.handleSelectedStation
+  //   })
+  // }
 
+  render() {
+    return (
       <div>
-        <div className={ `container station-container${this.props.stationType}` }>
+        <div className={ `container station-container${ this.props.stationType }` }>
           <div className="row station-row border">
-            <div className="one-third column station-name center"> {this.props.name} </div>
+            <div className="one-third column station-name center"> { this.props.name } </div>
             <div className="one-third column station-play-button center">
-              <i className="fa fa-play card-play-button " aria-hidden="true" onClick={ this.onStationSelect }></i>
+              <i className="fa fa-play card-play-button " aria-hidden="true" onClick={(e) => this.props.handleSelectedStation(this.state.details) }></i>
             </div>
             <div className="one-third column station-info-button center">
-              <i className="fa fa-chevron-down card-chevron" aria-hidden="true" onClick={ this.onInfoSelect }></i>
+              <i className="fa fa-chevron-down card-chevron" aria-hidden="true" onClick={ this.props.onInfoSelect }></i>
             </div>
           </div>
         </div>

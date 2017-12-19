@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export const handleSelectedStation = function(id, name, stream, type) {
+export const handleSelectedStation = function(details) {
     let station = {
-            id: id,
-            name: name,
-            stream: stream,
-            type: type
+            id: details.id,
+            name: details.name,
+            stream: details.stream,
+            type: details.type
         };
     let test = { key: 'value', tester: 'test'};
     localStorage.setItem('key', JSON.stringify(station)); //sets the localStorage to the station before setting the this.State to the station
