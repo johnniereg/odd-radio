@@ -350,6 +350,18 @@ exports.seed = function(knex, Promise) {
         frequency: '92.5 FM' ,
         language: 'English' ,
         stream_type: 'audio/mpeg'
+      },
+      {
+        id: 30,
+        name: 'CFUZ',
+        audio_feed: 'http://192.99.35.215:5073/peachcityradio',
+        home_page: 'http://www.peachcityradio.org/',
+        city: 'Penticton',
+        province: 'BC',
+        description: 'The Peach City Community Radio Society aims to provide fresh and unique radio broadcasting for Penticton area residents.',
+        frequency: '',
+        language: 'English',
+        stream_type: 'audio/mpeg'
       }
       ]);
     });

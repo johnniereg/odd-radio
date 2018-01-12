@@ -73,7 +73,7 @@ componentWillReceiveProps(props) {
     } else {
     // If it is not expanded, render the title card with option to expand.
       return (
-        <div id={ this.props.name }>
+        <div id={ this.props.name } className="shadowbox">
           <div className={`container station-container${this.props.stationType}`}>
             <div className="row station-row border">
               <div className="four columns station-branding center">
