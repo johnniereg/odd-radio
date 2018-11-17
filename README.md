@@ -34,6 +34,7 @@ Run dev script to compile javascript and start server.
 
 ```
 npm install
+npm run init
 npm run dev
 open http://localhost:3000
 ```
