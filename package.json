@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server/index.js",
     "webpack": "./node_modules/.bin/webpack",
-    "dev": "npm run webpack && npm run start",
+    "dev": "npm run webpack && ENV=development npm run start",
+    "init": "knex migrate:latest --env=development && knex seed:run --env=development",
     "test": "jest --coverage"
   },
   "repository": {
@@ -48,6 +49,7 @@
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.2.0",
     "sass-loader": "^6.0.6",
+    "sqlite3": "^4.0.4",
     "style-loader": "^0.19.1",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.1",
